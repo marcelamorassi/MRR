@@ -1,0 +1,55 @@
+---
+title: "MRR"
+author: "Marcela Morassi"
+date: "11/20/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Setup
+
+```{r}
+library(tidyverse)
+library(ggpubr)
+library(dplyr)
+library(ggplot2)
+library(vegan)
+theme_set(theme_classic()) # Set the theme
+
+
+setwd("C:/Users/Marcela Morassi/Documents/Github/MRR")
+
+#loading in list of files
+lst = list.files(pattern = "*.csv")
+```
+
+
+Lincoln-Petersen Estimates
+```{r}
+#effect of sampling intensity in Lincoln Petersen Estimates
+
+LPestimate = function(lst){
+  df = setNames(data.frame(matrix(ncol = 2, nrow = 0)), c("Combo", "N"))
+  for(i in lst){
+    # df name
+    df.sub = as.data.frame(lst[i])
+    #
+    namez = df.sub[1,5]
+    S = length(df.sub$Period == 2)
+    M = length(df.sub$Capture_Status == "Recap" | df.sub$Capture_Status == "Mark")
+    R = length(df.sub$Capture_Status == "Recap")
+    #calculate
+    N = (S*M)/R
+    #append to main df
+    subz = c(names, N)
+    df = rbind(df, subz)
+  }
+}
+
+butter = LPestimate(lst)
+
+```
+
